@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DomainX - Premier Domain Registrar & Cloud Services</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#0f172a',
+                        },
+                        accent: {
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-light {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 60%, #1e1b4b 100%);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 glass border-b border-slate-800 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('main')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-brand-500/30">
+                        <i class="fa-solid fa-globe text-xl text-white"></i>
+                    </div>
+                    <span class="text-2xl font-black tracking-tight text-white">Domain<span class="text-brand-500">X</span></span>
+                    <span class="bg-brand-500/20 text-brand-400 text-xs px-2 py-0.5 rounded-full font-semibold border border-brand-500/30 hidden sm:inline-block">ICANN Partner</span>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <button onclick="switchView('main')" class="nav-link px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-400 hover:bg-slate-800/50 transition">Domains</button>
+                    <button onclick="switchView('hosting')" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-brand-400 hover:bg-slate-800/50 transition">Hosting & Cloud</button>
+                    <button onclick="switchView('tools')" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-brand-400 hover:bg-slate-800/50 transition">WHOIS & Tools</button>
+                    <button onclick="switchView('pricing')" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-brand-400 hover:bg-slate-800/50 transition">Pricing Rate Card</button>
+                    <button onclick="switchView('dashboard')" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-brand-400 hover:bg-slate-800/50 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-gauge-high text-xs text-brand-400"></i> My Dashboard
+                    </button>
+                </nav>
+
+                <!-- Action Controls (Currency Selector & Cart) -->
+                <div class="flex items-center space-x-4">
+                    <!-- Currency Switcher -->
+                    <div class="relative inline-block text-left">
+                        <select id="currency-select" onchange="changeCurrency(this.value)" class="bg-slate-900 text-xs font-semibold text-slate-300 border border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand-500">
+                            <option value="INR">₹ INR</option>
+                            <option value="USD">$ USD</option>
+                        </select>
+                    </div>
+
+                    <!-- Cart Trigger Button -->
+                    <button onclick="toggleCartDrawer(true)" class="relative p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-slate-700 transition flex items-center justify-center">
+                        <i class="fa-solid fa-cart-shopping text-lg"></i>
+                        <span id="cart-count-badge" class="absolute -top-2 -right-2 bg-brand-600 text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-slate-950 shadow-md">0</span>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Container -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-800 bg-slate-900 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchView('main'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-200 hover:bg-slate-800 rounded-md">Domains & Generator</button>
+            <button onclick="switchView('hosting'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-200 hover:bg-slate-800 rounded-md">Hosting & Email</button>
+            <button onclick="switchView('tools'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-200 hover:bg-slate-800 rounded-md">WHOIS & Transfer</button>
+            <button onclick="switchView('pricing'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-200 hover:bg-slate-800 rounded-md">Rate Card Pricing</button>
+            <button onclick="switchView('dashboard'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-200 hover:bg-slate-800 rounded-md">Client Dashboard</button>
+        </div>
+    </header>
+
+    <!-- MAIN APPLICATION CONTAINER -->
+    <main class="flex-grow">
+        <!-- View 1: Main Landing & Search Section -->
+        <div id="view-main" class="view-panel">
+            <!-- Hero Banner -->
+            <section class="relative pt-12 pb-20 overflow-hidden gradient-bg border-b border-slate-800/80">
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand-600/20 via-transparent to-transparent"></div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                    
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-semibold mb-6">
+                        <i class="fa-solid fa-bolt text-brand-400 animate-pulse"></i> FLASH SALE: Save up to 88% on .COM & .IN Domains Today!
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-none mb-6">
+                        Find the Perfect <span class="gradient-text">Domain Name</span>
+                    </h1>
+                    <p class="text-slate-300 text-lg max-w-2xl mx-auto mb-10 font-normal">
+                        Secure your identity online with instant domain registration, free WHOIS privacy protection, and automated cloud DNS setup.
+                    </p>
+
+                    <!-- Domain Search Input Container -->
+                    <div class="max-w-4xl mx-auto bg-slate-900/90 p-3 sm:p-4 rounded-2xl shadow-2xl border border-slate-700/80 backdrop-blur-md">
+                        <!-- Mode Tabs (Single Search, Generator, Bulk Search) -->
+                        <div class="flex space-x-2 border-b border-slate-800 pb-3 mb-3 text-xs sm:text-sm font-semibold">
+                            <button id="tab-btn-single" onclick="setSearchTab('single')" class="px-4 py-1.5 rounded-lg bg-brand-600 text-white transition">Single Domain Search</button>
+                            <button id="tab-btn-generator" onclick="setSearchTab('generator')" class="px-4 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">AI Name Generator</button>
+                            <button id="tab-btn-bulk" onclick="setSearchTab('bulk')" class="px-4 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">Bulk Search</button>
+                        </div>
+
+                        <!-- Single Search Input Form -->
+                        <div id="search-single-box" class="flex flex-col md:flex-row gap-3">
+                            <div class="relative flex-grow">
+                                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="domain-search-input" placeholder="Enter your desired domain name (e.g. mybrand)" 
+                                    class="w-full bg-slate-950 border border-slate-700 text-white rounded-xl pl-11 pr-24 py-4 text-base font-medium focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition placeholder:text-slate-500"
+                                    onkeypress="if(event.key === 'Enter') performDomainSearch()">
+                                <select id="tld-filter" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-slate-900 text-slate-300 text-xs font-bold border border-slate-700 rounded-lg px-2 py-2 focus:outline-none focus:border-brand-500">
+                                    <option value="all">All TLDs</option>
+                                    <option value=".com">.com</option>
+                                    <option value=".in">.in</option>
+                                    <option value=".ai">.ai</option>
+                                    <option value=".org">.org</option>
+                                    <option value=".io">.io</option>
+                                </select>
+                            </div>
+                            <button onclick="performDomainSearch()" class="bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-500 hover:to-brand-600 text-white font-bold px-8 py-4 rounded-xl text-base transition flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30">
+                                <span>Search Domain</span>
+                                <i class="fa-solid fa-arrow-right text-sm"></i>
+                            </button>
+                        </div>
+
+                        <!-- AI Generator Input Form (Hidden by Default) -->
+                        <div id="search-generator-box" class="hidden flex flex-col md:flex-row gap-3">
+                            <div class="relative flex-grow">
+                                <i class="fa-solid fa-wand-magic-sparkles absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
+                                <input type="text" id="generator-keywords" placeholder="Enter keywords describing your business (e.g. tech, store, agency)" 
+                                    class="w-full bg-slate-950 border border-purple-500/40 text-white rounded-xl pl-11 pr-4 py-4 text-base font-medium focus:outline-none focus:border-purple-500 transition placeholder:text-slate-500">
+                            </div>
+                            <button onclick="generateAIDomains()" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold px-8 py-4 rounded-xl text-base transition flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30">
+                                <i class="fa-solid fa-sparkles"></i>
+                                <span>Generate Names</span>
+                            </button>
+                        </div>
+
+                        <!-- Bulk Search Box (Hidden by Default) -->
+                        <div id="search-bulk-box" class="hidden flex-col gap-3">
+                            <textarea id="bulk-domains-input" rows="3" placeholder="Enter multiple domains (one per line or comma separated, e.g. site1.com, mycompany.in, app.ai)" class="w-full bg-slate-950 border border-slate-700 text-white rounded-xl p-3 text-sm focus:outline-none focus:border-brand-500 placeholder:text-slate-500"></textarea>
+                            <button onclick="performBulkSearch()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-list-check"></i> Check Bulk Domains
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TLD Spotlight Badges -->
+                    <div class="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 max-w-5xl mx-auto">
+                        <div onclick="quickSearchTLD('.com')" class="glass p-3 rounded-xl border border-slate-800 hover:border-brand-500 cursor-pointer transition text-center group">
+                            <span class="text-xs text-slate-400 uppercase font-semibold">Popular</span>
+                            <div class="text-xl font-bold text-white group-hover:text-brand-400">.COM</div>
+                            <div class="text-xs text-brand-400 font-bold mt-1" data-price-com>₹799/yr</div>
+                        </div>
+                        <div onclick="quickSearchTLD('.in')" class="glass p-3 rounded-xl border border-slate-800 hover:border-brand-500 cursor-pointer transition text-center group">
+                            <span class="text-xs text-emerald-400 uppercase font-semibold">Trending</span>
+                            <div class="text-xl font-bold text-white group-hover:text-brand-400">.IN</div>
+                            <div class="text-xs text-brand-400 font-bold mt-1" data-price-in>₹399/yr</div>
+                        </div>
+                        <div onclick="quickSearchTLD('.ai')" class="glass p-3 rounded-xl border border-slate-800 hover:border-purple-500 cursor-pointer transition text-center group">
+                            <span class="text-xs text-purple-400 uppercase font-semibold">Tech Hot</span>
+                            <div class="text-xl font-bold text-white group-hover:text-purple-400">.AI</div>
+                            <div class="text-xs text-brand-400 font-bold mt-1" data-price-ai>₹4,999/yr</div>
+                        </div>
+                        <div onclick="quickSearchTLD('.org')" class="glass p-3 rounded-xl border border-slate-800 hover:border-brand-500 cursor-pointer transition text-center group">
+                            <span class="text-xs text-slate-400 uppercase font-semibold">Trusted</span>
+                            <div class="text-xl font-bold text-white group-hover:text-brand-400">.ORG</div>
+                            <div class="text-xs text-brand-400 font-bold mt-1" data-price-org>₹899/yr</div>
+                        </div>
+                        <div onclick="quickSearchTLD('.store')" class="glass p-3 rounded-xl border border-slate-800 hover:border-brand-500 cursor-pointer transition text-center group">
+                            <span class="text-xs text-amber-400 uppercase font-semibold">Ecommerce</span>
+                            <div class="text-xl font-bold text-white group-hover:text-brand-400">.STORE</div>
+                            <div class="text-xs text-brand-400 font-bold mt-1" data-price-store>₹199/yr</div>
+                        </div>
+                        <div onclick="quickSearchTLD('.io')" class="glass p-3 rounded-xl border border-slate-800 hover:border-brand-500 cursor-pointer transition text-center group">
+                            <span class="text-xs text-slate-400 uppercase font-semibold">Startups</span>
+                            <div class="text-xl font-bold text-white group-hover:text-brand-400">.IO</div>
+                            <div class="text-xs text-brand-400 font-bold mt-1" data-price-io>₹2,499/yr</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Results Display Area -->
+            <section id="results-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-square-poll-vertical text-brand-500"></i> Domain Search Results
+                    </h2>
+                    <span id="results-count" class="text-slate-400 text-sm">Showing recommendations</span>
+                </div>
+
+                <!-- Primary Match Result Card -->
+                <div id="primary-result-card" class="mb-8">
+                    <!-- Dynamic Javascript Content -->
+                </div>
+
+                <!-- Related & Suggested Domain Extensions -->
+                <h3 class="text-lg font-bold text-slate-300 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-tags text-brand-400 text-sm"></i> Other Available Extensions for Your Query
+                </h3>
+                <div id="suggestions-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Dynamic Suggestions List -->
+                </div>
+            </section>
+
+            <!-- Value Features Section -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-3xl font-extrabold text-white mb-4">Why Register Your Domain with DomainX?</h2>
+                    <p class="text-slate-400">Everything you need to launch, secure, and manage your online presence with peace of mind.</p>
+                </div>
+
+                <div class="g
