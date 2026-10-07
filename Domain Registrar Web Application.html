@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DomainX - Premier Domain Registrar & Cloud Services</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#0f172a',
+                        },
+                        accent: {
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-light {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 60%, #1e1b4b 100%);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 glass border-b border-slate-800 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('main')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-brand-500/30">
+                        <i class="fa-solid fa-globe text-xl text-white"></i>
+                    </div>
+                    <span class="text-2xl font-black tracking-tight text-white">Domain<span class="text-brand-500">X</span></span>
+                    <span class="bg-brand-500/20 text-brand-400 text-xs px-2 py-0.5 rounded-full font-semibold border border-brand-500/30 hidden sm:inline-block">ICANN Partner</span>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <button onclick="switchView('main')" class="nav-link px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-400 hover:bg-slate-800/50 transition">Domains</button>
+                    <button onclick="switchView('hosting')" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-brand-400 hover:bg-slate-800/50 transition">Hosting & Cloud</button>
+                    <button onclick="switchView('tools')" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-brand-400 hover:bg-slate-800/50 transition">WHOIS & Tools</button>
+                    <button onclick="switchView('pricing')" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-brand-400 hover:bg-slate-800/50 transition">Pricing Rate Card</button>
+                    <button onclick="switchView('dashboard')" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-brand-400 hover:bg-slate-800/50 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-gauge-high text-xs text-brand-400"></i> My Dashboard
+                    </button>
+                </nav>
+
+                <!-- Action Controls (Currency Selector & Cart) -->
+                <div class="flex items-center space-x-4">
+                    <!-- Currency Switcher -->
+                    <div class="relative inline-block text-left">
+                        <select id="currency-select" onchange="changeCurrency(this.value)" class="bg-slate-900 text-xs font-semibold text-slate-300 border border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand-500">
+                            <option value="INR">₹ INR</option>
+                            <option value="USD">$ USD</option>
+                        </select>
+                    </div>
+
+                    <!-- Cart Trigger Button -->
+                    <button onclick="toggleCartDrawer(true)" class="relative p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-slate-700 transition flex items-center justify-center">
+                        <i class="fa-solid fa-cart-shopping text-lg"></i>
+                        <span id="cart-count-badge" class="absolute -top-2 -right-2 bg-brand-600 text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-slate-950 shadow-md">0</span>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Container -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-800 bg-slate-900 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchView('main'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-200 hover:bg-slate-800 rounded-md">Domains & Generator</button>
+            <button onclick="switchView('hosting'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-200 hover:bg-slate-800 rounded-md">Hosting & Email</button>
+            <button onclick="switchView('tools'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-200 hover:bg-slate-800 rounded-md">WHOIS & Transfer</button>
+            <button onclick="switchView('pricing'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-200 hover:bg-slate-800 rounded-md">Rate Card Pricing</button>
+            <button onclick="switchView('dashboard'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-200 hover:bg-slate-800 rounded-md">Client Dashboard</button>
+        </div>
+    </header>
+
+    <!-- MAIN APPLICATION CONTAINER -->
+    <main class="flex-grow">
+        <!-- View 1: Main Landing & Search Section -->
+        <div id="view-main" class="view-panel">
+            <!-- Hero Banner -->
+            <section class="relative pt-12 pb-20 overflow-hidden gradient-bg border-b border-slate-800/80">
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand-600/20 via-transparent to-transparent"></div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                    
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-semibold mb-6">
+                        <i class="fa-solid fa-bolt text-brand-400 animate-pulse"></i> FLASH SALE: Save up to 88% on .COM & .IN Domains Today!
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-none mb-6">
+                        Find the Perfect <span class="gradient-text">Domain Name</span>
+                    </h1>
+                    <p class="text-slate-300 text-lg max-w-2xl mx-auto mb-10 font-normal">
+                        Secure your identity online with instant domain registration, free WHOIS privacy protection, and automated cloud DNS setup.
+                    </p>
+
+                    <!-- Domain Search Input Container -->
+                    <div class="max-w-4xl mx-auto bg-slate-900/90 p-3 sm:p-4 rounded-2xl shadow-2xl border border-slate-700/80 backdrop-blur-md">
+                        <!-- Mode Tabs (Single Search, Generator, Bulk Search) -->
+                        <div class="flex space-x-2 border-b border-slate-800 pb-3 mb-3 text-xs sm:text-sm font-semibold">
+                            <button id="tab-btn-single" onclick="setSearchTab('single')" class="px-4 py-1.5 rounded-lg bg-brand-600 text-white transition">Single Domain Search</button>
+                            <button id="tab-btn-generator" onclick="setSearchTab('generator')" class="px-4 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">AI Name Generator</button>
+                            <button id="tab-btn-bulk" onclick="setSearchTab('bulk')" class="px-4 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">Bulk Search</button>
+                        </div>
+
+                        <!-- Single Search Input Form -->
+                        <div id="search-single-box" class="flex flex-col md:flex-row gap-3">
+                            <div class="relative flex-grow">
+                                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="domain-search-input" placeholder="Enter your desired domain name (e.g. mybrand)" 
+                                    class="w-full bg-slate-950 border border-slate-700 text-white rounded-xl pl-11 pr-24 py-4 text-base font-medium focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition placeholder:text-slate-500"
+                                    onkeypress="if(event.key === 'Enter') performDomainSearch()">
+                                <select id="tld-filter" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-slate-900 text-slate-300 text-xs font-bold border border-slate-700 rounded-lg px-2 py-2 focus:outline-none focus:border-brand-500">
+                                    <option value="all">All TLDs</option>
+                                    <option value=".com">.com</option>
+                                    <option value=".in">.in</option>
+                                    <option value=".ai">.ai</option>
+                                    <option value=".org">.org</option>
+                                    <option value=".io">.io</option>
+                                </select>
+                            </div>
+                            <button onclick="performDomainSearch()" class="bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-500 hover:to-brand-600 text-white font-bold px-8 py-4 rounded-xl text-base transition flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30">
+                                <span>Search Domain</span>
+                                <i class="fa-solid fa-arrow-right text-sm"></i>
+                            </button>
+                        </div>
+
+                        <!-- AI Generator Input Form (Hidden by Default) -->
+                        <div id="search-generator-box" class="hidden flex flex-col md:flex-row gap-3">
+                            <div class="relative flex-grow">
+                                <i class="fa-solid fa-wand-magic-sparkles absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
+                                <input type="text" id="generator-keywords" placeholder="Enter keywords describing your business (e.g. tech, store, agency)" 
+                                    class="w-full bg-slate-950 border border-purple-500/40 text-white rounded-xl pl-11 pr-4 py-4 text-base font-medium focus:outline-none focus:border-purple-500 transition placeholder:text-slate-500">
+                            </div>
+                            <button onclick="generateAIDomains()" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold px-8 py-4 rounded-xl text-base transition flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30">
+                                <i class="fa-solid fa-sparkles"></i>
+                                <span>Generate Names</span>
+                            </button>
+                        </div>
+
+                        <!-- Bulk Search Box (Hidden by Default) -->
+                        <div id="search-bulk-box" class="hidden flex-col gap-3">
+                            <textarea id="bulk-domains-input" rows="3" placeholder="Enter multiple domains (one per line or comma separated, e.g. site1.com, mycompany.in, app.ai)" class="w-full bg-slate-950 border border-slate-700 text-white rounded-xl p-3 text-sm focus:outline-none focus:border-brand-500 placeholder:text-slate-500"></textarea>
+                            <button onclick="performBulkSearch()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-list-check"></i> Check Bulk Domains
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TLD Spotlight Badges -->
+                    <div class="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 max-w-5xl mx-auto">
+                        <div onclick="quickSearchTLD('.com')" class="glass p-3 rounded-xl border border-slate-800 hover:border-brand-500 cursor-pointer transition text-center group">
+                            <span class="text-xs text-slate-400 uppercase font-semibold">Popular</span>
+                            <div class="text-xl font-bold text-white group-hover:text-brand-400">.COM</div>
+                            <div class="text-xs text-brand-400 font-bold mt-1" data-price-com>₹799/yr</div>
+                        </div>
+                        <div onclick="quickSearchTLD('.in')" class="glass p-3 rounded-xl border border-slate-800 hover:border-brand-500 cursor-pointer transition text-center group">
+                            <span class="text-xs text-emerald-400 uppercase font-semibold">Trending</span>
+                            <div class="text-xl font-bold text-white group-hover:text-brand-400">.IN</div>
+                            <div class="text-xs text-brand-400 font-bold mt-1" data-price-in>₹399/yr</div>
+                        </div>
+                        <div onclick="quickSearchTLD('.ai')" class="glass p-3 rounded-xl border border-slate-800 hover:border-purple-500 cursor-pointer transition text-center group">
+                            <span class="text-xs text-purple-400 uppercase font-semibold">Tech Hot</span>
+                            <div class="text-xl font-bold text-white group-hover:text-purple-400">.AI</div>
+                            <div class="text-xs text-brand-400 font-bold mt-1" data-price-ai>₹4,999/yr</div>
+                        </div>
+                        <div onclick="quickSearchTLD('.org')" class="glass p-3 rounded-xl border border-slate-800 hover:border-brand-500 cursor-pointer transition text-center group">
+                            <span class="text-xs text-slate-400 uppercase font-semibold">Trusted</span>
+                            <div class="text-xl font-bold text-white group-hover:text-brand-400">.ORG</div>
+                            <div class="text-xs text-brand-400 font-bold mt-1" data-price-org>₹899/yr</div>
+                        </div>
+                        <div onclick="quickSearchTLD('.store')" class="glass p-3 rounded-xl border border-slate-800 hover:border-brand-500 cursor-pointer transition text-center group">
+                            <span class="text-xs text-amber-400 uppercase font-semibold">Ecommerce</span>
+                            <div class="text-xl font-bold text-white group-hover:text-brand-400">.STORE</div>
+                            <div class="text-xs text-brand-400 font-bold mt-1" data-price-store>₹199/yr</div>
+                        </div>
+                        <div onclick="quickSearchTLD('.io')" class="glass p-3 rounded-xl border border-slate-800 hover:border-brand-500 cursor-pointer transition text-center group">
+                            <span class="text-xs text-slate-400 uppercase font-semibold">Startups</span>
+                            <div class="text-xl font-bold text-white group-hover:text-brand-400">.IO</div>
+                            <div class="text-xs text-brand-400 font-bold mt-1" data-price-io>₹2,499/yr</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Results Display Area -->
+            <section id="results-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-square-poll-vertical text-brand-500"></i> Domain Search Results
+                    </h2>
+                    <span id="results-count" class="text-slate-400 text-sm">Showing recommendations</span>
+                </div>
+
+                <!-- Primary Match Result Card -->
+                <div id="primary-result-card" class="mb-8">
+                    <!-- Dynamic Javascript Content -->
+                </div>
+
+                <!-- Related & Suggested Domain Extensions -->
+                <h3 class="text-lg font-bold text-slate-300 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-tags text-brand-400 text-sm"></i> Other Available Extensions for Your Query
+                </h3>
+                <div id="suggestions-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Dynamic Suggestions List -->
+                </div>
+            </section>
+
+            <!-- Value Features Section -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-3xl font-extrabold text-white mb-4">Why Register Your Domain with DomainX?</h2>
+                    <p class="text-slate-400">Everything you need to launch, secure, and manage your online presence with peace of mind.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl hover:border-slate-700 transition">
+                        <div class="w-12 h-12 rounded-xl bg-brand-500/10 text-brand-400 flex items-center justify-center text-xl mb-4 border border-brand-500/20">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Free WHOIS Privacy</h3>
+                        <p class="text-slate-400 text-sm">Keep your personal address, phone number, and email safe from spammers at no additional cost.</p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl hover:border-slate-700 transition">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4 border border-emerald-500/20">
+                            <i class="fa-solid fa-bolt-lightning"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Instant DNS Propagation</h3>
+                        <p class="text-slate-400 text-sm">Ultra-fast Anycast DNS servers ensure your website updates propagation globally in seconds.</p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl hover:border-slate-700 transition">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl mb-4 border border-purple-500/20">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Auto-Renewal Protection</h3>
+                        <p class="text-slate-400 text-sm">Never lose your valuable domain names with automated renewal reminders and protection locks.</p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl hover:border-slate-700 transition">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mb-4 border border-amber-500/20">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">24/7 Expert Support</h3>
+                        <p class="text-slate-400 text-sm">Our domain and network infrastructure engineers are available round the clock via chat & ticket.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- View 2: Hosting & Email Packages View -->
+        <div id="view-hosting" class="view-panel hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-3xl font-extrabold text-white mb-3">High-Performance Web Hosting & Cloud Email</h2>
+                <p class="text-slate-400">Blazing fast NVMe SSD storage, free SSL certificates, and 99.9% guaranteed uptime.</p>
+            </div>
+
+            <!-- Pricing Tier Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <!-- Starter Shared Hosting -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-slate-700 transition">
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Starter Web</span>
+                        <h3 class="text-2xl font-bold text-white mt-1 mb-3">Shared Hosting</h3>
+                        <p class="text-slate-400 text-sm mb-6">Ideal for personal blogs & small starter websites.</p>
+                        <div class="flex items-baseline gap-1 mb-6">
+                            <span class="text-3xl font-black text-white" data-host-price-starter>₹149</span>
+                            <span class="text-slate-400 text-sm">/month</span>
+                        </div>
+                        <ul class="space-y-3 text-sm text-slate-300 mb-8">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> 1 Website Included</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> 20 GB NVMe Storage</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Free SSL Certificate</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> 2 Business Email Accounts</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Weekly Automated Backups</li>
+                        </ul>
+                    </div>
+                    <button onclick="addHostingToCart('Shared Hosting - Starter', 149)" class="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition text-sm">
+                        Add Hosting Plan
+                    </button>
+                </div>
+
+                <!-- Business WordPress Hosting (Featured) -->
+                <div class="bg-slate-900 border-2 border-brand-500 rounded-2xl p-6 flex flex-col justify-between relative shadow-xl shadow-brand-500/10 scale-105">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-600 text-white text-[11px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full shadow">
+                        Most Popular
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-brand-400 uppercase tracking-wider">Managed WordPress</span>
+                        <h3 class="text-2xl font-bold text-white mt-1 mb-3">Business Cloud</h3>
+                        <p class="text-slate-400 text-sm mb-6">High speed optimized WordPress environment for growing companies.</p>
+                        <div class="flex items-baseline gap-1 mb-6">
+                            <span class="text-3xl font-black text-white" data-host-price-business>₹399</span>
+                            <span class="text-slate-400 text-sm">/month</span>
+                        </div>
+                        <ul class="space-y-3 text-sm text-slate-300 mb-8">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-400"></i> <strong>10 Websites</strong> Included</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-400"></i> 100 GB High Speed NVMe</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-400"></i> Free Domain Name (1st Year)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-400"></i> Free Unlimited Business Email</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-400"></i> Daily Backups & CDN</li>
+                        </ul>
+                    </div>
+                    <button onclick="addHostingToCart('WordPress Cloud - Business', 399)" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl transition text-sm shadow-md">
+                        Add Business Bundle
+                    </button>
+                </div>
+
+                <!-- Business Email Solution -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-slate-700 transition">
+                    <div>
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Professional Branding</span>
+                        <h3 class="text-2xl font-bold text-white mt-1 mb-3">Professional Email</h3>
+                        <p class="text-slate-400 text-sm mb-6">Build trust with custom address like you@yourdomain.com.</p>
+                        <div class="flex items-baseline gap-1 mb-6">
+                            <span class="text-3xl font-black text-white" data-host-price-email>₹79</span>
+                            <span class="text-slate-400 text-sm">/mailbox/mo</span>
+                        </div>
+                        <ul class="space-y-3 text-sm text-slate-300 mb-8">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400"></i> 10 GB Mailbox Storage</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400"></i> Advanced Anti-Spam Filtering</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400"></i> Webmail & Mobile App Sync</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400"></i> Calendar & Contacts Sync</li>
+                        </ul>
+                    </div>
+                    <button onclick="addHostingToCart('Professional Business Email', 79)" class="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition text-sm">
+                        Add Email Package
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 3: WHOIS Lookup & Transfer Tools -->
+        <div id="view-tools" class="view-panel hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                
+                <!-- Tool 1: Domain Transfer Verification -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-brand-600/20 text-brand-400 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-right-left"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white">Transfer Your Domain</h2>
+                    </div>
+                    <p class="text-slate-400 text-sm mb-6">Move your existing domain to DomainX for cheaper renewals, free WHOIS privacy, and superior DNS management.</p>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">Domain Name to Transfer</label>
+                            <input type="text" id="transfer-domain-input" placeholder="example.com" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">EPP / Authorization Code</label>
+                            <input type="text" id="transfer-auth-code" placeholder="e.g. ePP-Auth#9218" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-brand-500">
+                        </div>
+                        <button onclick="simulateDomainTransfer()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                            <span>Initiate Transfer</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div id="transfer-status-msg" class="mt-4 hidden p-3 rounded-xl text-xs font-semibold"></div>
+                </div>
+
+                <!-- Tool 2: Free WHOIS Lookup -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-id-card"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white">Free WHOIS Lookup</h2>
+                    </div>
+                    <p class="text-slate-400 text-sm mb-6">Check registration records, domain owner details, creation dates, and nameservers for any domain.</p>
+
+                    <div class="flex gap-2 mb-6">
+                        <input type="text" id="whois-query-input" placeholder="e.g. google.com or github.com" class="flex-grow bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-purple-500">
+                        <button onclick="performWhoisLookup()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-6 py-3 rounded-xl transition text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span>Lookup</span>
+                        </button>
+                    </div>
+
+                    <!-- WHOIS Details Output Modal/Container -->
+                    <div id="whois-result-card" class="hidden bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs space-y-2 text-slate-300">
+                        <!-- Dynamic Javascript Results -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- View 4: Complete TLD Rate Card Pricing Table -->
+        <div id="view-pricing" class="view-panel hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-white">Domain Extension Pricing Table</h2>
+                    <p class="text-slate-400 text-sm mt-1">Transparent registration, renewal, and transfer fees with no hidden costs.</p>
+                </div>
+                <!-- Search filter for TLD table -->
+                <div class="relative w-full md:w-64">
+                    <i class="fa-solid fa-filter absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                    <input type="text" id="rate-search" onkeyup="filterRateTable()" placeholder="Search extension..." class="w-full bg-slate-900 border border-slate-800 text-slate-200 text-xs rounded-xl pl-9 pr-3 py-2.5 focus:outline-none focus:border-brand-500">
+                </div>
+            </div>
+
+            <!-- Pricing Table -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-950 border-b border-slate-800 text-xs text-slate-400 uppercase font-semibold">
+                                <th class="p-4">Extension</th>
+                                <th class="p-4">Registration (1 Year)</th>
+                                <th class="p-4">Renewal Rate</th>
+                                <th class="p-4">Transfer Fee</th>
+                                <th class="p-4">WHOIS Privacy</th>
+                                <th class="p-4 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rate-table-body" class="divide-y divide-slate-800/60 text-sm">
+                            <!-- Dynamic Javascript Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 5: User Dashboard / Domain Management Simulator -->
+        <div id="view-dashboard" class="view-panel hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-800">
+                <div>
+                    <span class="text-xs font-bold text-brand-400 uppercase">My Domain Manager</span>
+                    <h2 class="text-3xl font-extrabold text-white">Active Domains & DNS Settings</h2>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="switchView('main')" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Register New Domain
+                    </button>
+                </div>
+            </div>
+
+            <!-- Client Domains Table -->
+            <div class="grid grid-cols-1 gap-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-server text-brand-400"></i> My Registered Domains List
+                    </h3>
+                    <div id="user-domains-list" class="space-y-4">
+                        <!-- Dynamic List of User Managed Domains -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- SLIDE-OUT SHOPPING CART DRAWER MODAL -->
+    <div id="cart-drawer-backdrop" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden transition-opacity" onclick="toggleCartDrawer(false)"></div>
+    
+    <div id="cart-drawer" class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-slate-900 border-l border-slate-800 z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between">
+        <!-- Cart Header -->
+        <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-cart-shopping text-brand-400"></i>
+                <h3 class="text-lg font-bold text-white">Your Shopping Cart</h3>
+                <span id="drawer-item-count" class="bg-brand-500/20 text-brand-400 text-xs px-2 py-0.5 rounded-full font-bold border border-brand-500/30">0 items</span>
+            </div>
+            <button onclick="toggleCartDrawer(false)" class="text-slate-400 hover:text-white p-1">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items List Container -->
+        <div id="cart-items-container" class="flex-grow p-5 overflow-y-auto space-y-4">
+            <!-- Dynamic Cart Items Rendered Here -->
+        </div>
+
+        <!-- Cart Footer & Checkout Action -->
+        <div class="p-5 border-t border-slate-800 bg-slate-950 space-y-4">
+            <!-- Promo Code Input -->
+            <div class="flex gap-2">
+                <input type="text" id="coupon-code-input" placeholder="Promo code (e.g. DOMAIN50)" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white uppercase focus:outline-none focus:border-brand-500 flex-grow">
+                <button onclick="applyCouponCode()" class="bg-slate-800 hover:bg-slate-700 text-xs font-bold px-4 py-2 rounded-xl text-slate-200 transition">Apply</button>
+            </div>
+            <div id="coupon-status" class="text-[11px] font-semibold hidden"></div>
+
+            <!-- Price Breakdown Calculation -->
+            <div class="space-y-1.5 text-xs text-slate-400 pt-2">
+                <div class="flex justify-between">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal" class="text-white font-medium">₹0</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Discount</span>
+                    <span id="cart-discount" class="text-emerald-400 font-medium">-₹0</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Estimated Tax (18% GST / VAT)</span>
+                    <span id="cart-tax" class="text-white font-medium">₹0</span>
+                </div>
+                <div class="flex justify-between text-base text-white font-bold pt-2 border-t border-slate-800">
+                    <span>Total Due</span>
+                    <span id="cart-total" class="text-brand-400 font-black">₹0</span>
+                </div>
+            </div>
+
+            <!-- Checkout Button -->
+            <button onclick="openCheckoutModal()" class="w-full bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-500 hover:to-brand-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2">
+                <i class="fa-solid fa-lock text-xs"></i>
+                <span>Proceed to Secure Checkout</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- CHECKOUT SIMULATOR MODAL -->
+    <div id="checkout-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-white">Instant Payment Gateway</h3>
+                    <p class="text-xs text-slate-400">Complete payment to finalize domain activation</p>
+                </div>
+            </div>
+
+            <!-- Payment Methods Tabs -->
+            <div class="grid grid-cols-3 gap-2 mb-6 text-center text-xs font-bold">
+                <button onclick="setPaymentMethod('upi')" id="pay-tab-upi" class="p-3 rounded-xl border border-brand-500 bg-brand-500/10 text-brand-400 flex flex-col items-center gap-1">
+                    <i class="fa-solid fa-qrcode text-base"></i> UPI / QR Code
+                </button>
+                <button onclick="setPaymentMethod('card')" id="pay-tab-card" class="p-3 rounded-xl border border-slate-800 text-slate-400 hover:border-slate-700 flex flex-col items-center gap-1">
+                    <i class="fa-regular fa-credit-card text-base"></i> Card Payment
+                </button>
+                <button onclick="setPaymentMethod('net')" id="pay-tab-net" class="p-3 rounded-xl border border-slate-800 text-slate-400 hover:border-slate-700 flex flex-col items-center gap-1">
+                    <i class="fa-solid fa-building-columns text-base"></i> Net Banking
+                </button>
+            </div>
+
+            <div id="payment-box-upi" class="space-y-4 text-center">
+                <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 inline-block">
+                    <!-- Simulated QR Code SVG -->
+                    <svg class="w-32 h-32 mx-auto text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm9-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm13-2h2v2h-2v-2zm-4 0h2v2h-2v-2zm2 4h2v2h-2v-2zm2-2h2v2h-2v-2zm-2 4h2v2h-2v-2zm2 0h2v2h-2v-2z"/>
+                    </svg>
+                </div>
+                <p class="text-xs text-slate-400">Scan QR Code using Google Pay, PhonePe, Paytm, or BHIM</p>
+            </div>
+
+            <div id="payment-box-card" class="hidden space-y-3">
+                <input type="text" placeholder="Card Number (4000 1234 5678 9010)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-white">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" placeholder="MM / YY" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-white">
+                    <input type="password" placeholder="CVV" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-white">
+                </div>
+            </div>
+
+            <div id="payment-box-net" class="hidden space-y-3">
+                <select class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-300">
+                    <option>Select Your Bank</option>
+                    <option>State Bank of India (SBI)</option>
+                    <option>HDFC Bank</option>
+                    <option>ICICI Bank</option>
+                    <option>Axis Bank</option>
+                </select>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-slate-400 block">Total Amount</span>
+                    <span id="checkout-final-amount" class="text-xl font-extrabold text-white">₹0</span>
+                </div>
+                <button onclick="processOrderPayment()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl transition text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-check"></i> Complete Purchase
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Frequently Asked Questions -->
+    <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-900">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white text-center mb-10">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+            <details class="bg-slate-900 border border-slate-800 rounded-xl p-4 group cursor-pointer">
+                <summary class="font-bold text-white flex justify-between items-center list-none">
+                    <span>How long does it take for my domain to become active after purchase?</span>
+                    <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
+                </summary>
+                <p class="text-slate-400 text-sm mt-3 leading-relaxed">
+                    Domain activation is instantaneous! As soon as your order payment is processed, your domain name is immediately registered under your name and added to your management dashboard.
+                </p>
+            </details>
+
+            <details class="bg-slate-900 border border-slate-800 rounded-xl p-4 group cursor-pointer">
+                <summary class="font-bold text-white flex justify-between items-center list-none">
+                    <span>Is WHOIS Privacy Protection really 100% free forever?</span>
+                    <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
+                </summary>
+                <p class="text-slate-400 text-sm mt-3 leading-relaxed">
+                    Yes! DomainX includes free WHOIS Privacy protection for life on all supported TLD extensions (.com, .net, .org, .io, .ai etc.) to hide your personal address and contact info.
+                </p>
+            </details>
+
+            <details class="bg-slate-900 border border-slate-800 rounded-xl p-4 group cursor-pointer">
+                <summary class="font-bold text-white flex justify-between items-center list-none">
+                    <span>Can I transfer my existing domain from GoDaddy or Namecheap?</span>
+                    <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
+                </summary>
+                <p class="text-slate-400 text-sm mt-3 leading-relaxed">
+                    Absolutely! Use our Domain Transfer Tool in the menu. Just request an EPP authorization key from your current registrar, input it in DomainX, and we handle the seamless transfer.
+                </p>
+            </details>
+        </div>
+    </section>
+
+    <!-- App Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-12 text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+                <div class="flex items-center space-x-2 text-white font-bold text-lg mb-3">
+                    <i class="fa-solid fa-globe text-brand-500"></i>
+                    <span>DomainX</span>
+                </div>
+                <p class="text-slate-400 leading-relaxed mb-4">Official ICANN accredited domain registrar and high-speed cloud infrastructure provider.</p>
+                <p>© 2026 DomainX Inc. All rights reserved.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Domain Extensions</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" onclick="quickSearchTLD('.com')" class="hover:text-white transition">Buy .COM Domains</a></li>
+                    <li><a href="#" onclick="quickSearchTLD('.in')" class="hover:text-white transition">Buy .IN Domains</a></li>
+                    <li><a href="#" onclick="quickSearchTLD('.ai')" class="hover:text-white transition">Buy .AI Tech Domains</a></li>
+                    <li><a href="#" onclick="quickSearchTLD('.org')" class="hover:text-white transition">Buy .ORG Domains</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Hosting & Cloud</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" onclick="switchView('hosting')" class="hover:text-white transition">Managed WordPress</a></li>
+                    <li><a href="#" onclick="switchView('hosting')" class="hover:text-white transition">Shared Web Hosting</a></li>
+                    <li><a href="#" onclick="switchView('hosting')" class="hover:text-white transition">Business Email Solutions</a></li>
+                    <li><a href="#" onclick="switchView('tools')" class="hover:text-white transition">Domain Transfers</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Security & Trust</h4>
+                <div class="flex items-center gap-2 mb-3 text-slate-300">
+                    <i class="fa-solid fa-lock text-emerald-400"></i> 256-Bit SSL Encryption
+                </div>
+                <div class="flex items-center gap-2 text-slate-300">
+                    <i class="fa-solid fa-shield-cat text-brand-400"></i> DNSSEC Protection Available
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC & ENGINE -->
+    <script>
+        // Global Application State Data
+        let currentCurrency = 'INR'; // Default currency
+        let currentDiscount = 0; // Discount percentage
+        
+        // Currency Conversion Multiplier (INR to USD)
+        const exchangeRateUSD = 0.012; // 1 INR ~ $0.012 USD
+
+        // Domain Rate Data Bank
+        const TLD_PRICING = [
+            { tld: '.com', regINR: 799, renewINR: 999, transferINR: 799, popular: true },
+            { tld: '.in', regINR: 399, renewINR: 599, transferINR: 399, popular: true },
+            { tld: '.ai', regINR: 4999, renewINR: 5499, transferINR: 4999, popular: false },
+            { tld: '.org', regINR: 899, renewINR: 1099, transferINR: 899, popular: true },
+            { tld: '.store', regINR: 199, renewINR: 1299, transferINR: 199, popular: false },
+            { tld: '.io', regINR: 2499, renewINR: 2899, transferINR: 2499, popular: false },
+            { tld: '.tech', regINR: 299, renewINR: 1499, transferINR: 299, popular: false },
+            { tld: '.co', regINR: 699, renewINR: 1199, transferINR: 699, popular: false },
+            { tld: '.net', regINR: 849, renewINR: 1049, transferINR: 849, popular: false }
+        ];
+
+        // Global User Cart State
+        let cartItems = [];
+
+        // Global User Registered Domains State (Simulator)
+        let userDomains = [
+            { name: 'mybrandstudio.com', regDate: '2025-02-10', expiryDate: '2027-02-10', autoRenew: true, locked: true, nameservers: ['ns1.domainx.com', 'ns2.domainx.com'] },
+            { name: 'startupindia.in', regDate: '2024-11-15', expiryDate: '2026-11-15', autoRenew: false, locked: true, nameservers: ['ns1.domainx.com', 'ns2.domainx.com'] }
+        ];
+
+        // Format Currency Helper
+        function formatPrice(amountINR) {
+            if (currentCurrency === 'USD') {
+                const usd = (amountINR * exchangeRateUSD).toFixed(2);
+                return `$${usd}`;
+            }
+            return `₹${amountINR.toLocaleString('en-IN')}`;
+        }
+
+        // Change Currency Handler
+        function changeCurrency(currency) {
+            currentCurrency = currency;
+            updateTLDSpotlightPrices();
+            renderRateTable();
+            renderCartDrawer();
+            renderUserDomains();
+        }
+
+        // Update Spotlight Header TLD Badges
+        function updateTLDSpotlightPrices() {
+            document.querySelectorAll('[data-price-com]').forEach(el => el.textContent = `${formatPrice(799)}/yr`);
+            document.querySelectorAll('[data-price-in]').forEach(el => el.textContent = `${formatPrice(399)}/yr`);
+            document.querySelectorAll('[data-price-ai]').forEach(el => el.textContent = `${formatPrice(4999)}/yr`);
+            document.querySelectorAll('[data-price-org]').forEach(el => el.textContent = `${formatPrice(899)}/yr`);
+            document.querySelectorAll('[data-price-store]').forEach(el => el.textContent = `${formatPrice(199)}/yr`);
+            document.querySelectorAll('[data-price-io]').forEach(el => el.textContent = `${formatPrice(2499)}/yr`);
+
+            document.querySelectorAll('[data-host-price-starter]').forEach(el => el.textContent = formatPrice(149));
+            document.querySelectorAll('[data-host-price-business]').forEach(el => el.textContent = formatPrice(399));
+            document.querySelectorAll('[data-host-price-email]').forEach(el => el.textContent = formatPrice(79));
+        }
+
+        // Search Input Switcher Tabs
+        function setSearchTab(tab) {
+            document.getElementById('search-single-box').classList.add('hidden');
+            document.getElementById('search-generator-box').classList.add('hidden');
+            document.getElementById('search-bulk-box').classList.add('hidden');
+
+            document.getElementById('tab-btn-single').className = "px-4 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition";
+            document.getElementById('tab-btn-generator').className = "px-4 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition";
+            document.getElementById('tab-btn-bulk').className = "px-4 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition";
+
+            if (tab === 'single') {
+                document.getElementById('search-single-box').classList.remove('hidden');
+                document.getElementById('tab-btn-single').className = "px-4 py-1.5 rounded-lg bg-brand-600 text-white transition";
+            } else if (tab === 'generator') {
+                document.getElementById('search-generator-box').classList.remove('hidden');
+                document.getElementById('tab-btn-generator').className = "px-4 py-1.5 rounded-lg bg-purple-600 text-white transition";
+            } else if (tab === 'bulk') {
+                document.getElementById('search-bulk-box').classList.remove('hidden');
+                document.getElementById('search-bulk-box').classList.add('flex');
+                document.getElementById('tab-btn-bulk').className = "px-4 py-1.5 rounded-lg bg-brand-600 text-white transition";
+            }
+        }
+
+        // Perform Domain Availability Search
+        function performDomainSearch() {
+            let input = document.getElementById('domain-search-input').value.trim().toLowerCase();
+            if (!input) {
+                alert('Please enter a domain name or keyword to search!');
+                return;
+            }
+
+            // Remove http / https / www if typed
+            input = input.replace(/^(https?:\/\/)?(www\.)?/, '');
+
+            // Extract base keyword & extension if typed
+            let baseName = input;
+            let chosenTld = '.com';
+
+            if (input.includes('.')) {
+                const parts = input.split('.');
+                baseName = parts[0];
+                chosenTld = '.' + parts.slice(1).join('.');
+            }
+
+            // Filter TLD dropdown selection
+            const dropdownTld = document.getElementById('tld-filter').value;
+            if (dropdownTld !== 'all' && !input.includes('.')) {
+                chosenTld = dropdownTld;
+            }
+
+            // Deterministic mock test: domains with 'google', 'facebook', 'godaddy' are marked TAKEN
+            const isTaken = ['google', 'facebook', 'godaddy', 'microsoft', 'amazon', 'test'].includes(baseName);
+            const mainTldData = TLD_PRICING.find(t => t.tld === chosenTld) || TLD_PRICING[0];
+
+            // Render Results Container
+            const resultsSection = document.getElementById('results-section');
+            resultsSection.classList.remove('hidden');
+
+            const primaryCard = document.getElementById('primary-result-card');
+            const fullDomain = `${baseName}${chosenTld}`;
+
+            if (!isTaken) {
+                primaryCard.innerHTML = `
+                    <div class="bg-gradient-to-r from-emerald-950/60 to-slate-900 border-2 border-emerald-500/80 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="bg-emerald-500 text-slate-950 text-xs font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">Available Now</span>
+                                <span class="text-xs text-slate-400"><i class="fa-solid fa-shield text-emerald-400"></i> Free Privacy Protection</span>
+                            </div>
+                            <h3 class="text-3xl font-black text-white">${fullDomain}</h3>
+                            <p class="text-xs text-slate-400 mt-1">Renews annually at ${formatPrice(mainTldData.renewINR)}/year</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-right">
+                                <div class="text-3xl font-extrabold text-emerald-400">${formatPrice(mainTldData.regINR)}</div>
+                                <div class="text-[11px] text-slate-400">for 1st year</div>
+                            </div>
+                            <button onclick="addDomainToCart('${fullDomain}', ${mainTldData.regINR})" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-6 py-3.5 rounded-xl transition text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/20">
+                                <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                primaryCard.innerHTML = `
+                    <div class="bg-slate-900 border-2 border-rose-500/50 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="bg-rose-500/20 text-rose-400 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase">Unavailable</span>
+                            </div>
+                            <h3 class="text-3xl font-black text-slate-400 line-through">${fullDomain}</h3>
+                            <p class="text-xs text-slate-400 mt-1">This domain is already registered by someone else.</p>
+                        </div>
+                        <button onclick="performWhoisLookup('${fullDomain}'); switchView('tools')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-5 py-3 rounded-xl transition text-xs">
+                            <i class="fa-solid fa-id-card"></i> Check WHOIS Owner
+                        </button>
+                    </div>
+                `;
+            }
+
+            // Generate alternative TLD suggestions
+            const suggestionsGrid = document.getElementById('suggestions-grid');
+            suggestionsGrid.innerHTML = '';
+
+            TLD_PRICING.filter(t => t.tld !== chosenTld).forEach(item => {
+                const altDomain = `${baseName}${item.tld}`;
+                const card = document.createElement('div');
+                card.className = "bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between hover:border-slate-700 transition";
+                card.innerHTML = `
+                    <div>
+                        <div class="font-bold text-white text-base">${altDomain}</div>
+                        <div class="text-xs text-brand-400 font-semibold">${formatPrice(item.regINR)} <span class="text-slate-500 font-normal">/1st yr</span></div>
+                    </div>
+                    <button onclick="addDomainToCart('${altDomain}', ${item.regINR})" class="bg-slate-800 hover:bg-brand-600 hover:text-white text-slate-300 font-bold px-3.5 py-2 rounded-lg text-xs transition">
+                        + Add
+                    </button>
+                `;
+                suggestionsGrid.appendChild(card);
+            });
+
+            // Smooth scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Quick TLD Spotlight Search
+        function quickSearchTLD(tld) {
+            document.getElementById('domain-search-input').value = 'mybrand';
+            document.getElementById('tld-filter').value = tld;
+            switchView('main');
+            performDomainSearch();
+        }
+
+        // AI Domain Generator
+        function generateAIDomains() {
+            const keyword = document.getElementById('generator-keywords').value.trim().toLowerCase() || 'tech';
+            const prefixes = ['get', 'the', 'go', 'try', 'my', 'cloud', 'next', 'smart'];
+            const suffixes = ['hub', 'lab', 'io', 'app', 'hq', 'x', 'box', 'flow'];
+
+            const generated = [];
+            prefixes.forEach(p => generated.push(`${p}${keyword}`));
+            suffixes.forEach(s => generated.push(`${keyword}${s}`));
+
+            const resultsSection = document.getElementById('results-section');
+            resultsSection.classList.remove('hidden');
+
+            const primaryCard = document.getElementById('primary-result-card');
+            primaryCard.innerHTML = `
+                <div class="bg-purple-950/30 border border-purple-500/30 rounded-2xl p-4 mb-4 text-purple-300 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> AI generated domain suggestions based on <strong>"${keyword}"</strong>
+                </div>
+            `;
+
+            const suggestionsGrid = document.getElementById('suggestions-grid');
+            suggestionsGrid.innerHTML = '';
+
+            generated.slice(0, 9).forEach((name, idx) => {
+                const randomTld = TLD_PRICING[idx % TLD_PRICING.length];
+                const fullDomain = `${name}${randomTld.tld}`;
+                const card = document.createElement('div');
+                card.className = "bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between hover:border-purple-500/50 transition";
+                card.innerHTML = `
+                    <div>
+                        <div class="font-bold text-white text-base">${fullDomain}</div>
+                        <div class="text-xs text-purple-400 font-semibold">${formatPrice(randomTld.regINR)} <span class="text-slate-500 font-normal">/yr</span></div>
+                    </div>
+                    <button onclick="addDomainToCart('${fullDomain}', ${randomTld.regINR})" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-2 rounded-lg text-xs transition">
+                        + Add
+                    </button>
+                `;
+                suggestionsGrid.appendChild(card);
+            });
+
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Add Domain to Cart
+        function addDomainToCart(domainName, priceINR) {
+            const exists = cartItems.some(i => i.name === domainName);
+            if (exists) {
+                alert(`${domainName} is already in your cart!`);
+                return;
+            }
+
+            cartItems.push({
+                id: Date.now(),
+                type: 'domain',
+                name: domainName,
+                priceINR: priceINR,
+                years: 1,
+                privacy: true
+            });
+
+            renderCartDrawer();
+            toggleCartDrawer(true);
+        }
+
+        // Add Hosting to Cart
+        function addHostingToCart(planName, monthlyINR) {
+            cartItems.push({
+                id: Date.now(),
+                type: 'hosting',
+                name: planName,
+                priceINR: monthlyINR * 12, // 1 year billing
+                years: 1,
+                privacy: false
+            });
+
+            renderCartDrawer();
+            toggleCartDrawer(true);
+        }
+
+        // Remove Item from Cart
+        function removeFromCart(id) {
+            cartItems = cartItems.filter(item => item.id !== id);
+            renderCartDrawer();
+        }
+
+        // Update Item Years
+        function updateCartYears(id, years) {
+            const item = cartItems.find(i => i.id === id);
+            if (item) {
+                item.years = parseInt(years);
+                renderCartDrawer();
+            }
+        }
+
+        // Toggle WHOIS Privacy
+        function toggleCartPrivacy(id) {
+            const item = cartItems.find(i => i.id === id);
+            if (item) {
+                item.privacy = !item.privacy;
+                renderCartDrawer();
+            }
+        }
+
+        // Render Cart Drawer
+        function renderCartDrawer() {
+            const container = document.getElementById('cart-items-container');
+            const badge = document.getElementById('cart-count-badge');
+            const drawerBadge = document.getElementById('drawer-item-count');
+
+            badge.textContent = cartItems.length;
+            drawerBadge.textContent = `${cartItems.length} items`;
+
+            if (cartItems.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 text-slate-500 space-y-3">
+                        <i class="fa-solid fa-cart-flatbed text-4xl text-slate-700"></i>
+                        <p class="text-sm">Your shopping cart is currently empty.</p>
+                    </div>
+                `;
+                updateCartTotals(0);
+                return;
+            }
+
+            container.innerHTML = '';
+            let subtotalINR = 0;
+
+            cartItems.forEach(item => {
+                const itemTotalINR = item.priceINR * item.years;
+                subtotalINR += itemTotalINR;
+
+                const card = document.createElement('div');
+                card.className = "bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3";
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider ${item.type === 'domain' ? 'text-brand-400' : 'text-purple-400'}">
+                                ${item.type === 'domain' ? 'Domain Registration' : 'Hosting Package'}
+                            </span>
+                            <h4 class="font-bold text-white text-base">${item.name}</h4>
+                        </div>
+                        <button onclick="removeFromCart(${item.id})" class="text-slate-500 hover:text-rose-400 p-1">
+                            <i class="fa-solid fa-trash-can text-sm"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-900">
+                        <!-- Registration Duration Dropdown -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-400">Term:</span>
+                            <select onchange="updateCartYears(${item.id}, this.value)" class="bg-slate-900 text-slate-200 border border-slate-800 rounded px-2 py-1 focus:outline-none">
+                                <option value="1" ${item.years === 1 ? 'selected' : ''}>1 Year</option>
+                                <option value="2" ${item.years === 2 ? 'selected' : ''}>2 Years</option>
+                                <option value="3" ${item.years === 3 ? 'selected' : ''}>3 Years</option>
+                                <option value="5" ${item.years === 5 ? 'selected' : ''}>5 Years</option>
+                            </select>
+                        </div>
+                        <div class="font-bold text-white text-sm">
+                            ${formatPrice(itemTotalINR)}
+                        </div>
+                    </div>
+
+                    ${item.type === 'domain' ? `
+                        <div class="flex items-center justify-between bg-slate-900/60 p-2 rounded-lg text-xs">
+                            <span class="text-slate-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-user-shield text-emerald-400"></i> Free WHOIS Privacy
+                            </span>
+                            <span class="text-emerald-400 font-bold text-[11px]">FREE</span>
+                        </div>
+                    ` : ''}
+                `;
+                container.appendChild(card);
+            });
+
+            updateCartTotals(subtotalINR);
+        }
+
+        // Apply Promo Code
+        function applyCouponCode() {
+            const input = document.getElementById('coupon-code-input').value.trim().toUpperCase();
+            const status = document.getElementById('coupon-status');
+
+            if (input === 'DOMAIN50' || input === 'FIRSTBUY') {
+                currentDiscount = 0.20; // 20% off
+                status.className = "text-[11px] font-semibold text-emerald-400 block";
+                status.textContent = "Promo applied! 20% discount unlocked.";
+            } else {
+                currentDiscount = 0;
+                status.className = "text-[11px] font-semibold text-rose-400 block";
+                status.textContent = "Invalid promo code. Try DOMAIN50.";
+            }
+            renderCartDrawer();
+        }
+
+        // Update Total Prices Calculation
+        function updateCartTotals(subtotalINR) {
+            const discountAmountINR = subtotalINR * currentDiscount;
+            const taxableINR = subtotalINR - discountAmountINR;
+            const taxINR = taxableINR * 0.18; // 18% tax
+            const finalTotalINR = taxableINR + taxINR;
+
+            document.getElementById('cart-subtotal').textContent = formatPrice(subtotalINR);
+            document.getElementById('cart-discount').textContent = `-${formatPrice(discountAmountINR)}`;
+            document.getElementById('cart-tax').textContent = formatPrice(taxINR);
+            document.getElementById('cart-total').textContent = formatPrice(finalTotalINR);
+            document.getElementById('checkout-final-amount').textContent = formatPrice(finalTotalINR);
+        }
+
+        // Toggle Drawer Visibility
+        function toggleCartDrawer(open) {
+            const backdrop = document.getElementById('cart-drawer-backdrop');
+            const drawer = document.getElementById('cart-drawer');
+
+            if (open) {
+                backdrop.classList.remove('hidden');
+                drawer.classList.remove('translate-x-full');
+            } else {
+                backdrop.classList.add('hidden');
+                drawer.classList.add('translate-x-full');
+            }
+        }
+
+        // Modal Controls for Checkout
+        function openCheckoutModal() {
+            if (cartItems.length === 0) {
+                alert('Your cart is empty! Add a domain first.');
+                return;
+            }
+            toggleCartDrawer(false);
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        // Payment Method Switcher
+        function setPaymentMethod(method) {
+            document.getElementById('payment-box-upi').classList.add('hidden');
+            document.getElementById('payment-box-card').classList.add('hidden');
+            document.getElementById('payment-box-net').classList.add('hidden');
+
+            document.getElementById('pay-tab-upi').className = "p-3 rounded-xl border border-slate-800 text-slate-400 hover:border-slate-700 flex flex-col items-center gap-1";
+            document.getElementById('pay-tab-card').className = "p-3 rounded-xl border border-slate-800 text-slate-400 hover:border-slate-700 flex flex-col items-center gap-1";
+            document.getElementById('pay-tab-net').className = "p-3 rounded-xl border border-slate-800 text-slate-400 hover:border-slate-700 flex flex-col items-center gap-1";
+
+            if (method === 'upi') {
+                document.getElementById('payment-box-upi').classList.remove('hidden');
+                document.getElementById('pay-tab-upi').className = "p-3 rounded-xl border border-brand-500 bg-brand-500/10 text-brand-400 flex flex-col items-center gap-1";
+            } else if (method === 'card') {
+                document.getElementById('payment-box-card').classList.remove('hidden');
+                document.getElementById('pay-tab-card').className = "p-3 rounded-xl border border-brand-500 bg-brand-500/10 text-brand-400 flex flex-col items-center gap-1";
+            } else if (method === 'net') {
+                document.getElementById('payment-box-net').classList.remove('hidden');
+                document.getElementById('pay-tab-net').className = "p-3 rounded-xl border border-brand-500 bg-brand-500/10 text-brand-400 flex flex-col items-center gap-1";
+            }
+        }
+
+        // Process Checkout Purchase Simulation
+        function processOrderPayment() {
+            // Push purchased domains into user dashboard
+            cartItems.forEach(item => {
+                if (item.type === 'domain') {
+                    userDomains.push({
+                        name: item.name,
+                        regDate: new Date().toISOString().split('T')[0],
+                        expiryDate: new Date(Date.now() + 31536000000 * item.years).toISOString().split('T')[0],
+                        autoRenew: true,
+                        locked: true,
+                        nameservers: ['ns1.domainx.com', 'ns2.domainx.com']
+                    });
+                }
+            });
+
+            cartItems = [];
+            renderCartDrawer();
+            closeCheckoutModal();
+            renderUserDomains();
+
+            alert('🎉 Congratulations! Your domain registration order was completed successfully. View your new domains in the Dashboard!');
+            switchView('dashboard');
+        }
+
+        // Render TLD Rate Card Table
+        function renderRateTable() {
+            const tbody = document.getElementById('rate-table-body');
+            tbody.innerHTML = '';
+
+            TLD_PRICING.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition";
+                tr.innerHTML = `
+                    <td class="p-4 font-extrabold text-white">
+                        ${item.tld} ${item.popular ? '<span class="ml-1 bg-brand-500/20 text-brand-400 text-[10px] px-2 py-0.5 rounded-full border border-brand-500/30">Hot</span>' : ''}
+                    </td>
+                    <td class="p-4 font-bold text-emerald-400">${formatPrice(item.regINR)}</td>
+                    <td class="p-4 text-slate-300">${formatPrice(item.renewINR)}</td>
+                    <td class="p-4 text-slate-300">${formatPrice(item.transferINR)}</td>
+                    <td class="p-4 text-emerald-400 font-semibold"><i class="fa-solid fa-check"></i> Included</td>
+                    <td class="p-4 text-right">
+                        <button onclick="quickSearchTLD('${item.tld}')" class="bg-slate-800 hover:bg-brand-600 hover:text-white text-slate-300 text-xs font-bold px-3 py-1.5 rounded-lg transition">
+                            Register
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Filter Rate Table
+        function filterRateTable() {
+            const query = document.getElementById('rate-search').value.toLowerCase();
+            const rows = document.querySelectorAll('#rate-table-body tr');
+
+            rows.forEach(row => {
+                const text = row.cells[0].textContent.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        }
+
+        // Simulate WHOIS Lookup Query
+        function performWhoisLookup(customDomain) {
+            const input = customDomain || document.getElementById('whois-query-input').value.trim();
+            const resultCard = document.getElementById('whois-result-card');
+
+            if (!input) {
+                alert('Please enter a valid domain for WHOIS lookup');
+                return;
+            }
+
+            resultCard.classList.remove('hidden');
+            resultCard.innerHTML = `
+                <div class="text-brand-400 font-bold border-b border-slate-800 pb-2">WHOIS Data for ${input}</div>
+                <div class="grid grid-cols-2 gap-2 text-[11px] pt-1">
+                    <div><span class="text-slate-500">Registrar:</span> DomainX ICANN LLC</div>
+                    <div><span class="text-slate-500">Status:</span> clientTransferProhibited</div>
+                    <div><span class="text-slate-500">Creation Date:</span> 2021-04-12</div>
+                    <div><span class="text-slate-500">Expiration Date:</span> 2028-04-12</div>
+                    <div><span class="text-slate-500">Name Server 1:</span> NS1.DOMAINX.COM</div>
+                    <div><span class="text-slate-500">Name Server 2:</span> NS2.DOMAINX.COM</div>
+                    <div><span class="text-slate-500">Privacy Status:</span> Protected by Privacy Shield</div>
+                </div>
+            `;
+        }
+
+        // Simulate Domain Transfer Process
+        function simulateDomainTransfer() {
+            const domain = document.getElementById('transfer-domain-input').value.trim();
+            const code = document.getElementById('transfer-auth-code').value.trim();
+            const msg = document.getElementById('transfer-status-msg');
+
+            if (!domain || !code) {
+                alert('Please enter both domain name and authorization code!');
+                return;
+            }
+
+            msg.classList.remove('hidden');
+            msg.className = "mt-4 p-3 rounded-xl text-xs font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400";
+            msg.innerHTML = `<i class="fa-solid fa-circle-check"></i> Transfer request for <strong>${domain}</strong> validated! Added transfer item to cart.`;
+
+            // Add transfer item to cart
+            addDomainToCart(`Transfer: ${domain}`, 799);
+        }
+
+        // Render User Managed Domains in Dashboard
+        function renderUserDomains() {
+            const container = document.getElementById('user-domains-list');
+            if (userDomains.length === 0) {
+                container.innerHTML = `<div class="text-slate-500 text-sm">No registered domains found.</div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            userDomains.forEach((d, idx) => {
+                const item = document.createElement('div');
+                item.className = "bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3";
+                item.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-white text-lg">${d.name}</span>
+                                <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">Active</span>
+                            </div>
+                            <div class="text-xs text-slate-400 mt-0.5">Expires: ${d.expiryDate}</div>
+                        </div>
+
+                        <div class="flex items-center gap-3 text-xs">
+                            <label class="flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                                <input type="checkbox" ${d.autoRenew ? 'checked' : ''} onchange="userDomains[${idx}].autoRenew = !userDomains[${idx}].autoRenew" class="rounded accent-brand-600"> Auto-Renew
+                            </label>
+                            <button onclick="generateTransferAuthCode('${d.name}')" class="bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition font-medium">
+                                Get EPP Code
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- DNS Management Block -->
+                    <details class="bg-slate-900/60 p-3 rounded-lg text-xs">
+                        <summary class="text-brand-400 font-bold cursor-pointer flex items-center justify-between">
+                            <span><i class="fa-solid fa-gears"></i> Manage DNS Nameservers</span>
+                            <i class="fa-solid fa-chevron-down text-slate-500"></i>
+                        </summary>
+                        <div class="mt-3 space-y-2 pt-2 border-t border-slate-800">
+                            <div>
+                                <label class="text-[11px] text-slate-400 block mb-1">Nameserver 1</label>
+                                <input type="text" value="${d.nameservers[0]}" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-slate-200">
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 block mb-1">Nameserver 2</label>
+                                <input type="text" value="${d.nameservers[1]}" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-slate-200">
+                            </div>
+                            <button onclick="alert('DNS Nameservers updated successfully!')" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-3 py-1.5 rounded transition mt-1">
+                                Save DNS Records
+                            </button>
+                        </div>
+                    </details>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function generateTransferAuthCode(domain) {
+            const randomCode = 'EPP-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+            alert(`EPP Transfer Auth Code for ${domain}:\n\n${randomCode}\n\nKeep this code secret.`);
+        }
+
+        // Single Page View Switcher Navigation
+        function switchView(viewName) {
+            document.querySelectorAll('.view-panel').forEach(v => v.classList.add('hidden'));
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle Mobile Navigation Header
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Initialize Application
+        window.onload = function() {
+            updateTLDSpotlightPrices();
+            renderRateTable();
+            renderCartDrawer();
+            renderUserDomains();
+        }
+    </script>
+</body>
+</html>
